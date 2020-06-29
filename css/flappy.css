@@ -56,7 +56,6 @@ html{
 }
 
 .barrier .body{
-    height: 6rem;
     width: 5rem;
 
     background: linear-gradient(90deg, rgb(51, 153, 51), rgb(0, 204, 102));
