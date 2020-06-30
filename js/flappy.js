@@ -67,7 +67,7 @@ function barriersControl(height, width, space, off, pointNot){
             const mid = width / 2
             const midCross = pair.getX() + deslc >= mid && pair.getX() < mid
 
-            //if (midCross) pointNot()
+            if (midCross) pointNot()
         })
     }
 }
@@ -99,13 +99,36 @@ function Bird(gameHeight){
     this.setY(gameHeight/2)
 }
 
-const barriers = new barriersControl(30, 60, 12.5, 20)
-const bird = new Bird(30)
-const gameArea = document.querySelector('[wm-flappy]')
+function Progress(){
+    this.element = newElement('span', 'progress')
+    this.updatePoints = pontos => {
+        this.element.innerHTML = pontos
+    }
+    this.updatePoints(0)
+}
 
-gameArea.appendChild(bird.element)
-barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
-setInterval(() => {
-    barriers.animate()
-    bird.animate()
-}, 20)
+function FlappyBird(){
+    let score = 0
+    let height = 30
+    let width = 60
+
+    const gameArea = document.querySelector('[wm-flappy]')
+    
+    const progress = new Progress()
+    const barriers = new barriersControl(height, width, 12.5, 20, 
+        () => progress.updatePoints(++score))
+    const bird = new Bird(height)
+
+    gameArea.appendChild(progress.element)
+    gameArea.appendChild(bird.element)
+    barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
+
+    this.start = () => {
+        const timer = setInterval(() => {
+            barriers.animate()
+            bird.animate()
+        },20)
+    }
+}
+
+new FlappyBird().start()
