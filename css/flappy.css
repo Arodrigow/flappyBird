@@ -26,7 +26,6 @@ html{
 .bird{
     position: absolute;
     left: calc(50% - 1.25rem);
-    bottom: 50%;
 
     width: 2.5rem; 
 }

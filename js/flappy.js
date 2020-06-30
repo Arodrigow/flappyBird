@@ -53,29 +53,59 @@ function barriersControl(height, width, space, off, pointNot){
         new Barriers(height, space, width + off * 4)
     ]
 
-    const deslc = 0.5
+    const deslc = 0.2
 
     this.animate = () =>{
         this.pairs.forEach(pair => {
             pair.setX(pair.getX() - deslc)
-            console.log(pair.getX())
+
             if (pair.getX() < -height){
                 pair.setX(pair.getX() + off * this.pairs.length)
                 pair.createSpace()
             }
 
-           /* const mid = width / 2
-            const midCross = pair.getX() + deslc >= mid
-                && pair.getX() < mid
+            const mid = width / 2
+            const midCross = pair.getX() + deslc >= mid && pair.getX() < mid
 
-            if (midCross) pointNot()*/
+            //if (midCross) pointNot()
         })
     }
 }
 
-const barriers = new barriersControl(30, 60, 10, 20)
+function Bird(gameHeight){
+
+    this.element = newElement('img', 'bird')
+    this.element.src = 'imgs/bird.png'
+
+    this.getY = () => parseFloat(this.element.style.bottom.split('rem')[0])
+    this.setY = y => this.element.style.bottom = `${y}rem`
+    let add = 0
+    window.onkeypress = e => add = 4
+
+    this.animate = () => {
+        const newY = this.getY() + add - 0.2       
+        add = 0
+        const maxHeight = gameHeight - 2.5
+
+        if (newY <= 0){
+            this.setY(0)
+        } else if (newY >= maxHeight){
+            this.setY(maxHeight)
+        }else{
+            this.setY(newY)
+        }
+    }
+
+    this.setY(gameHeight/2)
+}
+
+const barriers = new barriersControl(30, 60, 12.5, 20)
+const bird = new Bird(30)
 const gameArea = document.querySelector('[wm-flappy]')
+
+gameArea.appendChild(bird.element)
 barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
 setInterval(() => {
     barriers.animate()
-}, 5)
+    bird.animate()
+}, 20)
